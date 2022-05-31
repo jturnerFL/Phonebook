@@ -1,3 +1,4 @@
+from urllib import response
 from flask import Blueprint, request, jsonify, render_template
 from helpers import token_required
 from models import db, User, Contact, contact_schema, contacts_schema
@@ -37,14 +38,10 @@ def get_contact(current_user_token):
 
 @api.route('/contacts/<id>', methods = ['GET'])
 @token_required
-def get_contact_two(current_user_token, id):
-    fan = current_user_token.token
-    if fan == current_user_token.token:
-        contact = Contact.query.get(id)
-        response = contact_schema.dump(contact)
-        return jsonify(response)
-    else:
-        return jsonify({"message": "Valid Token Required"}),401
+def get_single_contact(current_user_token, id):
+    contact = Contact.query.get(id)
+    response = contact_schema.dump(contact)
+    return jsonify(response)
 
 # UPDATE endpoint
 @api.route('/contacts/<id>', methods = ['POST','PUT'])
@@ -61,8 +58,6 @@ def update_contact(current_user_token,id):
     response = contact_schema.dump(contact)
     return jsonify(response)
 
-
-# DELETE car ENDPOINT
 @api.route('/contacts/<id>', methods = ['DELETE'])
 @token_required
 def delete_contact(current_user_token, id):

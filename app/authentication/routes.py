@@ -23,7 +23,6 @@ def signup():
 
             flash (f'You have successfully created a user account {email}', 'User-created')
             return redirect(url_for('site.home'))
-
     except:
         raise Exception('Invalid form data: Please check your form')
     return render_template('sign_up.html', form=form)
@@ -45,11 +44,12 @@ def signin():
                 return redirect(url_for('site.profile'))
             else:
                 flash('You have failed in your attempt to access this content.', 'auth-failed')
+                return redirect(url_for('auth.signin'))
     except:
-        raise Exception('Invalid form data: Please check your form')
+        raise Exception('Invalid form data: Please check your Form')
     return render_template('sign_in.html', form=form)
 
 @auth.route('/logout')
 def logout():
-    logout_user()
+    logout_user
     return redirect(url_for('site.home'))

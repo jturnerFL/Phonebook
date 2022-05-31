@@ -8,11 +8,11 @@ from flask_login import LoginManager
 from flask_marshmallow import Marshmallow
 import secrets
 
-Login_manager = LoginManager()
+login_manager = LoginManager()
 ma = Marshmallow()
 db = SQLAlchemy()
 
-@Login_manager.user_loader
+@login_manager.user_loader
 def load_user(user_id):
     return User.query.get(user_id)
 
@@ -68,7 +68,7 @@ class Contact(db.Model):
         return f'The following contact has been added to the phonebook: {self.name}'
 
     def set_id(self):
-        return (secrets.token_urlsafe)
+        return (secrets.token_urlsafe())
 
 class ContactSchema(ma.Schema):
     class Meta:
