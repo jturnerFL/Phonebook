@@ -9,6 +9,13 @@ api = Blueprint('api',__name__, url_prefix='/api')
 def getdata():
     return {'yee': 'naw'}
 
+@api.route('/data')
+def viewdata():
+    data = get_contact()
+    response = jsonify(data)
+    print(response)
+    return render_template('index.html', data = data)
+
 @api.route('/contacts', methods = ['POST'])
 @token_required
 def create_contact(current_user_token):
@@ -39,9 +46,13 @@ def get_contact(current_user_token):
 @api.route('/contacts/<id>', methods = ['GET'])
 @token_required
 def get_single_contact(current_user_token, id):
-    contact = Contact.query.get(id)
-    response = contact_schema.dump(contact)
-    return jsonify(response)
+    fan = current_user_token.token
+    if fan == current_user_token.token:
+        contact = Contact.query.get(id)
+        response = contact_schema.dump(contact)
+        return jsonify(response)
+    else:
+        return jsonify({"message": "Valid Token Required"}), 401
 
 # UPDATE endpoint
 @api.route('/contacts/<id>', methods = ['POST','PUT'])
